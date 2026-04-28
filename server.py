@@ -14,34 +14,55 @@ CORS(app)
 
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-def scrape_etsy(url):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-    response = requests.get(url, headers=headers, timeout=10)
-    soup = BeautifulSoup(response.text, "html.parser")
 
-    print("PAGE TITLE:", soup.title.string if soup.title else "NONE")
-    print("H1 TAGS:", [h.get_text(strip=True)[:50] for h in soup.find_all("h1")])
+def get_listing_id(url):
+    # Plockar ut listing ID från Etsy URL
+    # t.ex. https://www.etsy.com/listing/4420009795/...
+    parts = url.split("/listing/")
+    if len(parts) > 1:
+        return parts[1].split("/")[0]
+    return None
 
-    # Hämta titel
-    title = ""
-    title_tag = soup.find("h1")
-    if title_tag:
-        title = title_tag.get_text(strip=True)
+def fetch_etsy_listing(listing_id):
+    api_key = os.getenv("ETSY_API_KEY")
+    print("API KEY:", api_key[:20] if api_key else "NONE")
+    url = f"https://openapi.etsy.com/v3/application/listings/{listing_id}"
+    headers = {"x-api-key": api_key}
+    response = requests.get(url, headers=headers)
+    print("ETSY STATUS:", response.status_code)
+    print("ETSY RESPONSE:", response.text[:500])
+    data = response.json()
+    return data
 
-    # Hämta beskrivning
-    desc = ""
-    desc_tag = soup.find("p", {"data-product-details-description-text-content": True})
-    if not desc_tag:
-        desc_tag = soup.find("div", class_=lambda c: c and "description" in c.lower())
-    if desc_tag:
-        desc = desc_tag.get_text(strip=True)
+@app.route("/scrape", methods=["POST"])
+def scrape():
+    data = request.json
+    url = data.get("url", "")
+    print("GOT URL:", url[:80])
+    if not url:
+        return jsonify({"error": "No URL provided"}), 400
+    try:
+        listing_id = get_listing_id(url)
+        print("LISTING ID:", listing_id)
+        if not listing_id:
+            return jsonify({"error": "Could not find listing ID in URL"}), 400
 
-    return title, desc
+        listing = fetch_etsy_listing(listing_id)
+        print("LISTING KEYS:", listing.keys())
+
+        title = listing.get("title", "")
+        desc = listing.get("description", "")
+        tags = ", ".join(listing.get("tags", []))
+
+        return jsonify({"title": title, "description": desc, "tags": tags})
+    except Exception as e:
+        print("ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
+
 
 
 @app.route("/analyze", methods=["POST"])
+
 def analyze():
     data = request.json
     title = data.get("title", "")
@@ -115,17 +136,7 @@ DESCRIPTION: {desc}"""
 
     return jsonify(result)
 
-@app.route("/scrape", methods=["POST"])
-def scrape():
-    data = request.json
-    url = data.get("url", "")
-    if not url:
-        return jsonify({"error": "No URL provided"}), 400
-    try:
-        title, desc = scrape_etsy(url)
-        return jsonify({"title": title, "description": desc})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 // ── State ────────────────────────────────────────────────────
-let usesLeft = 3;
+let usesLeft = parseInt(localStorage.getItem('usesLeft') ?? '3');
 
 //fetcha url funktion
 async function fetchFromUrl() {
@@ -63,6 +63,7 @@ async function analyzeListing() {
 const result = await response.json();
 
     usesLeft--;
+    localStorage.setItem('usesLeft', usesLeft);
     document.querySelector('.uses-left').textContent = `${usesLeft} free analys${usesLeft === 1 ? 'is' : 'es'} left`;
 
     renderResults(result);
@@ -157,3 +158,6 @@ async function mockAnalysis(title, tags, desc) {
     ]
   };
 }
+
+// ── Uppdatera räknaren vid sidladdning ──
+document.querySelector('.uses-left').textContent = `${usesLeft} free analys${usesLeft === 1 ? 'is' : 'es'} left`;
