@@ -45,7 +45,12 @@ async function analyzeListing() {
   }
 
   if (usesLeft <= 0) {
-    alert('You have used all 3 free analyses. Upgrade to continue!');
+    const response = await fetch("http://127.0.0.1:5000/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+    });
+    const data = await response.json();
+    if (data.url) window.location.href = data.url;
     return;
   }
 

@@ -6,6 +6,10 @@ import anthropic
 from dotenv import load_dotenv
 import requests
 from bs4 import BeautifulSoup
+import stripe
+
+
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 load_dotenv()
 
@@ -135,6 +139,34 @@ DESCRIPTION: {desc}"""
     result = json.loads(raw.strip())
 
     return jsonify(result)
+
+
+@app.route("/create-checkout", methods=["POST"])
+def create_checkout():
+    try:
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[{
+                "price_data": {
+                    "currency": "usd",
+                    "product_data": {
+                        "name": "ListingIQ Pro",
+                        "description": "Unlimited Etsy listing analyses"
+                    },
+                    "unit_amount": 900,
+                    "recurring": {"interval": "month"}
+                },
+                "quantity": 1
+            }],
+            mode="subscription",
+            success_url="http://127.0.0.1:5500/success.html",
+            cancel_url="http://127.0.0.1:5500/index.html"
+        )
+        return jsonify({"url": session.url})
+    except Exception as e:
+        print("STRIPE ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
+
 
 
 
