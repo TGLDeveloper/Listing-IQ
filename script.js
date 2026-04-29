@@ -11,7 +11,7 @@ async function fetchFromUrl() {
   btn.disabled = true;
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/scrape", {
+    const response = await fetch("https://listing-iq-production.up.railway.app/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url })
@@ -45,7 +45,7 @@ async function analyzeListing() {
   }
 
   if (usesLeft <= 0) {
-    const response = await fetch("http://127.0.0.1:5000/create-checkout", {
+    const response = await fetch("https://listing-iq-production.up.railway.app/create-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" }
     });
@@ -60,7 +60,7 @@ async function analyzeListing() {
   document.getElementById('analyze-btn').disabled = true;
 
   try {
-    const response = await fetch("http://127.0.0.1:5000/analyze", {
+    const response = await fetch("https://listing-iq-production.up.railway.app/analyze", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ title, tags, description: desc })
@@ -165,7 +165,7 @@ async function mockAnalysis(title, tags, desc) {
 }
 
 async function goToPro() {
-  const response = await fetch("http://127.0.0.1:5000/create-checkout", {
+  const response = await fetch("https://listing-iq-production.up.railway.app/create-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" }
   });
