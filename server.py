@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import anthropic
 from dotenv import load_dotenv
@@ -13,7 +13,7 @@ stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='')
 CORS(app)
 
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
@@ -37,6 +37,14 @@ def fetch_etsy_listing(listing_id):
     print("ETSY RESPONSE:", response.text[:500])
     data = response.json()
     return data
+
+@app.route("/")
+def index():
+    return send_from_directory(app.static_folder, "index.html")
+
+@app.route("/<path:filename>")
+def serve_static(filename):
+    return send_from_directory(app.static_folder, filename)
 
 @app.route("/scrape", methods=["POST"])
 def scrape():

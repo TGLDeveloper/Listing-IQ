@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ListingIQ – Etsy SEO Analyzer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+
+  <header>
+    <div class="logo">Listing<span>IQ</span></div>
+    <div class="uses-left">3 free analyses left</div>
+    <button onclick="goToPro()" class="upgrade-btn">Upgrade to Pro →</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="label">AI-powered Etsy SEO</p>
+      <h1>Is your listing<br><em>leaving money</em><br>on the table?</h1>
+      <p class="sub">Paste your Etsy listing below. We'll tell you exactly what's costing you sales — and how to fix it.</p>
+    </section>
+
+    <section class="input-section">
+      <div class="input-card">
+        <label for="listing-url">Etsy listing URL</label>
+        <div class="url-row">
+          <input type="text" id="listing-url" placeholder="https://www.etsy.com/listing/..." />
+          <button id="fetch-btn" onclick="fetchFromUrl()">Fetch</button>
+        </div>
+
+        <div class="divider"><span>or fill in manually</span></div>
+
+        <label for="listing-title">Product title</label>
+        <input type="text" id="listing-title" placeholder="e.g. Handmade silver ring" />
+
+        <label for="listing-tags">Tags <span class="hint">(comma separated)</span></label>
+        <input type="text" id="listing-tags" placeholder="e.g. silver ring, gift for her, minimalist jewelry" />
+
+        <label for="listing-desc">Product description</label>
+        <textarea id="listing-desc" rows="6" placeholder="Paste your full product description here..."></textarea>
+
+        <button id="analyze-btn" onclick="analyzeListing()">
+          <span class="btn-text">Analyze my listing</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="results-section" id="results" style="display:none;">
+      <div class="results-header">
+        <p class="overall-summary" id="overall-summary"></p>
+        <h2>Your analysis</h2>
+        <div class="overall-score">
+          <span class="score-label">Overall score</span>
+          <span class="score-value" id="overall-score">–</span>
+          <span class="score-max">/10</span>
+        </div>
+      </div>
+
+      <div class="cards-grid">
+
+        <div class="result-card" id="card-title">
+          <div class="card-top">
+            <span class="card-icon">T</span>
+            <span class="card-name">Title</span>
+            <span class="card-score" id="title-score">–/10</span>
+          </div>
+          <ul class="issues-list" id="title-issues"></ul>
+          <div class="improved-box" id="title-improved"></div>
+        </div>
+
+        <div class="result-card" id="card-tags">
+          <div class="card-top">
+            <span class="card-icon">#</span>
+            <span class="card-name">Tags</span>
+            <span class="card-score" id="tags-score">–/10</span>
+          </div>
+          <ul class="issues-list" id="tags-missing"></ul>
+          <p class="card-explanation" id="tags-explanation"></p>
+        </div>
+
+        <div class="result-card" id="card-desc">
+          <div class="card-top">
+            <span class="card-icon">¶</span>
+            <span class="card-name">Description</span>
+            <span class="card-score" id="desc-score">–/10</span>
+          </div>
+          <ul class="issues-list" id="desc-issues"></ul>
+          <div class="improved-box" id="desc-improved"></div>
+        </div>
+
+        <div class="result-card" id="card-photos">
+          <div class="card-top">
+            <span class="card-icon">📷</span>
+            <span class="card-name">Photos</span>
+          </div>
+          <p class="card-explanation" id="photos-feedback"></p>
+        </div>
+
+        <div class="result-card wide" id="card-wins">
+          <div class="card-top">
+            <span class="card-icon">⚡</span>
+            <span class="card-name">Quick wins</span>
+          </div>
+          <ol class="wins-list" id="quick-wins"></ol>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="loading" id="loading" style="display:none;">
+      <div class="spinner"></div>
+      <p>Analyzing your listing...</p>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
