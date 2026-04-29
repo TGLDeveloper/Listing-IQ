@@ -9,9 +9,11 @@ from bs4 import BeautifulSoup
 import stripe
 
 
+load_dotenv()
+
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-load_dotenv()
+
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 CORS(app)
