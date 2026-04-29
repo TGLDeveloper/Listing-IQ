@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome to Pro – ListingIQ</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <header>
+    <div class="logo">Listing<span>IQ</span></div>
+  </header>
+  <main style="text-align:center; padding-top: 200px;">
+    <p class="label">Payment successful</p>
+    <h1>Welcome to <em>Pro</em></h1>
+    <p class="sub" style="margin: 24px auto;">You now have unlimited analyses. Let's make your listings unstoppable.</p>
+    <a href="index.html" style="
+      display: inline-block;
+      margin-top: 32px;
+      background: var(--accent);
+      color: #0e0e0e;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      text-decoration: none;
+    ">Start analyzing →</a>
+  </main>
+  <script>
+    // Ge användaren obegränsad access
+    localStorage.setItem('isPro', 'true');
+    localStorage.setItem('usesLeft', 999);
+  </script>
+</body>
+</html>
