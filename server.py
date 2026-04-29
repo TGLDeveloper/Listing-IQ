@@ -159,8 +159,8 @@ def create_checkout():
                 "quantity": 1
             }],
             mode="subscription",
-            success_url="http://127.0.0.1:5500/success.html",
-            cancel_url="http://127.0.0.1:5500/index.html"
+            success_url="https://listing-iq-production.up.railway.app/success.html",
+            cancel_url="https://listing-iq-production.up.railway.app/index.html"
         )
         return jsonify({"url": session.url})
     except Exception as e:
