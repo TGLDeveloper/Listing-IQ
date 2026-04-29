@@ -164,5 +164,20 @@ async function mockAnalysis(title, tags, desc) {
   };
 }
 
+async function goToPro() {
+  const response = await fetch("http://127.0.0.1:5000/create-checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" }
+  });
+  const data = await response.json();
+  if (data.url) window.location.href = data.url;
+}
+
+
+
 // ── Uppdatera räknaren vid sidladdning ──
-document.querySelector('.uses-left').textContent = `${usesLeft} free analys${usesLeft === 1 ? 'is' : 'es'} left`;
+const isPro = localStorage.getItem('isPro') === 'true';
+document.querySelector('.uses-left').textContent = isPro ? 'Unlimited analyses' : `${usesLeft} free analys${usesLeft === 1 ? 'is' : 'es'} left`;
+
+
+
