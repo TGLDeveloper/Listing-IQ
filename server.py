@@ -146,7 +146,13 @@ DESCRIPTION: {desc}"""
         raw = raw.split("```")[1]
         if raw.startswith("json"):
             raw = raw[4:]
-    result = json.loads(raw.strip())
+    raw = raw.strip()
+    # Hitta första { och sista } för att extrahera ren JSON
+    start = raw.find("{")
+    end = raw.rfind("}") + 1
+    if start != -1 and end > start:
+        raw = raw[start:end]
+    result = json.loads(raw)
 
     return jsonify(result)
 
