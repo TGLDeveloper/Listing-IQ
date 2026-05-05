@@ -169,7 +169,7 @@ def create_checkout():
                         "name": "ListingIQ Pro",
                         "description": "Unlimited Etsy listing analyses"
                     },
-                    "unit_amount": 900,
+                    "unit_amount": 399,
                     "recurring": {"interval": "month"}
                 },
                 "quantity": 1
